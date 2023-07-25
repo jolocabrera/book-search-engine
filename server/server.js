@@ -5,6 +5,7 @@ const path = require('path');
 const {typeDefs, resolvers} = require('./schemas');
 const {authMiddleware} = require('./utils/auth');
 const db = require('./config/connection');
+const http = require('http');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -27,6 +28,10 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 
+// keeps heroku app running
+setInterval(() => {
+  http.get("http://example.herokuapp.com");
+}, 25 * 60 * 1000); // every 25 minutes
 
 const startApolloServer = async (typeDefs, resolvers) => {
   await server.start();
